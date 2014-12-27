@@ -10,12 +10,15 @@ class switch_left_up{
   int i;
   int butt = 0;
   String ButtonLable;
-  
+  Serial this_porta;
   //costruttore 
-  switch_left_up(int tempX, int tempY, String lable){ //la Classe Button necessita di tre campi che devono essere definiti quando si istanzia un nuovo oggetto
-                                              //la posizione X, Y ed una stringa che definisce l'etichetta 
+  switch_left_up(int tempX, int tempY, String lable, Serial porta){ 
+    //la Classe Button necessita di tre campi che devono essere definiti quando si istanzia un nuovo oggetto
+    //la posizione X, Y ed una stringa che definisce l'etichetta 
     x = tempX; //il campo tempX viene passato alla variabile globale della Classe X
     y = tempY; //il campo tempY viene passato alla variabile globale della Classe Y
+
+    Serial this_porta = porta;
 
     ButtonLable = lable;  //il campo lable viene passato alla variabile globale della Classe LedLable
     
@@ -25,76 +28,85 @@ class switch_left_up{
     textSize(20); //viene definita la dimensione del carattere
     textAlign(LEFT);//viene definito l'allineamento del testo, a sinistra
                      //questi parametri servono per la rappresentazione dell'etichetta
+                     
   }
-  
+  //  
+  //METODO right() --------------------------------------------------------------------------------------------
+  //  
   int right(){
     return x + 100;
   }
-  
+  //  
+  //METODO left() ---------------------------------------------------------------------------------------------
+  //  
   int left(){
     return x - 100;
   }
-  
-  
-//METODO active() ---------------------------
-  boolean straight(){  //il metodo è definito come un boolean
-    if (butt == 1){  //se la variabile butt = 1 allora il metodo resituisce "true" altrimenti "false"
+  //  
+  //METODO straight() -----------------------------------------------------------------------------------------
+  //  
+  boolean straight(){  
+    // Il metodo è definito come un boolean se la variabile butt = 1 allora il metodo 
+    // restituisce "true" altrimenti "false". Serve ad indicare se lo scambio e' disposto 
+    // o meno per il corretto tracciato.
+    if (butt == 1){  
      return true;
      }
      else{
      return false;
     }
   }
-//-------------------------------------------  
-
-
-//METODO display() ---------------------------
+  //  
+  //METODO display() -------------------------------------------------------------------------------------------
+  //  
   void display(){
     fill(0);
-    text(ButtonLable,x,y+90); //scrittura dell'etichetta sotto all'interruttore
+    //scrittura dell'etichetta sotto all'interruttore
+    text(ButtonLable,x,y + 90); 
     
-    if (butt == 0){           //se il valore di button = 0 viene visualizzata l'immagine dell'interruttore off 
-      image(switch_left_up_div, x,y);  //visualizzazione del'interruttore off
+    if (butt == 0){           
+      // visualizzazione dell'immagine del deviatoio con tracciato deviato
+      image(switch_left_up_div, x,y); 
     }
-    else{                       //altrimenti
-      image(switch_left_up_str, x,y);   //viene visualizzata, nella stessa posizione, l'immagine dell'interruttore on
+    else{  
+      // viene visualizzata, nella stessa posizione, l'immagine del deviatorio
+      // in posizione di corretto tracciato       
+      image(switch_left_up_str, x,y);   
     }
-//-------------------------------------------  
 
-
-    //++ gestore button ++++++++++++++++++++++++++++++++++++
-    strokeWeight(1);  //spessore del bordo
-    if (overRect(x,y,50,60)){  //la funzione overRect restituisce TRUE se il mouse è sopra il rettangolo che rappresenta l'interruttore, altrimenti 
-      stroke(241, 250, 18); //definizione di una linea di colore giallo
+    // gestore scambio
+    strokeWeight(3);  //spessore del bordo
+    if (overRect(x,y,100,100)){//la funzione overRect restituisce TRUE se il mouse è sopra il rettangolo 
+                               //che rappresenta l'interruttore 
+      stroke(255, 0, 0);       //definizione di una linea di colore giallo
       noFill();
-      rect(x,y,50,60);  //disegno di un rettangolo di colore giallo in corrispondenza dell'interruttore, 
-                             //questa tecnica serve ad evideziare quando il mouse è sopra l'area attiva
+      rect(x,y,100,100);       //disegno di un rettangolo di colore giallo attorno all'elemento del deviatoio, 
+                               //questa tecnica serve ad evideziare quando il mouse è sopra l'area attiva
     }
     else  
     {
-      noStroke(); //nessuna linea
-      noFill(); //nessun riempimento
-      rect(x,y,30,100);
+      noStroke();              //nessuna linea
+      noFill();                //nessun riempimento
+      rect(x,y,100,100);
     }
 
     //cambio dello stato del pulsante se tasto mouse premuto
-    if ((overRect(x,y,50,70)) && mousePressed)  //se contemporaneamente il mouse è sopra l'area del pulsante ed il tasto sinistro è premuto
+    if ((overRect(x,y,100,100)) && mousePressed)  //se contemporaneamente il mouse è sopra l'area del pulsante ed il tasto sinistro è premuto
     {                                             //viene cambiato il valore di button in 0 se era 1, oppure in 1 se precedentemente era 0
-      delay(250);                                 //questo ciclo di ritardo funziona da debounce del tasto del mouse
-      if (butt == 0) //se il valore di button è 0
-      {
-        butt = 1; //button diventa 1
-      } 
-      else  //altrimenti, ovvero se button era 1
-      {  
-        butt = 0; //button viene cambiato in 0
-      }
-    }  
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+      delay(200);                                 //questo ciclo di ritardo funziona da debounce del tasto del mouse
+      if (butt == 0){ butt = 1;} 
+      else{           butt = 0;}
+      myPort.write('2');
+      delay(250);       
+      myPort.write('0');
+    } 
   }
-
-  boolean overRect(int x, int y, int w, int h)   //funzione overRect, vengono passati i parametri di posizione X e Y, e di larghezza W e altezza H del pulsante
+  //  
+  //METODO display() -------------------------------------------------------------------------------------------
+  //  
+  // funzione overRect, vengono passati i parametri di posizione X e Y, e di larghezza W e 
+  // altezza H del pulsante  
+  boolean overRect(int x, int y, int w, int h)   
   {
     if (mouseX >= x && mouseX <= x+w &&  mouseY >= y && mouseY <= y+h) {
       return true;
@@ -103,9 +115,6 @@ class switch_left_up{
       return false;
     }
   }
-
-
-
 }
 
 

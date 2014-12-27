@@ -10,9 +10,9 @@ class switch_right_up{
   int i;
   int butt = 0;
   String ButtonLable;
-  
+  Serial this_porta;
   //costruttore 
-  switch_right_up(int tempX, int tempY, String lable){ //la Classe Button necessita di tre campi che devono essere definiti quando si istanzia un nuovo oggetto
+  switch_right_up(int tempX, int tempY, String lable, Serial porta){ //la Classe Button necessita di tre campi che devono essere definiti quando si istanzia un nuovo oggetto
                                               //la posizione X, Y ed una stringa che definisce l'etichetta 
     x = tempX; //il campo tempX viene passato alla variabile globale della Classe X
     y = tempY; //il campo tempY viene passato alla variabile globale della Classe Y
@@ -25,6 +25,8 @@ class switch_right_up{
     textSize(20); //viene definita la dimensione del carattere
     textAlign(LEFT);//viene definito l'allineamento del testo, a sinistra
                      //questi parametri servono per la rappresentazione dell'etichetta
+  
+    this_porta = porta;
   }
   
   int right(){
@@ -89,6 +91,9 @@ class switch_right_up{
       {  
         butt = 0; //button viene cambiato in 0
       }
+      myPort.write('1');
+      delay(250);       
+      myPort.write('0');
     }  
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
