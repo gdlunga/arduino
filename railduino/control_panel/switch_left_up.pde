@@ -60,9 +60,9 @@ class switch_left_up{
   //METODO display() -------------------------------------------------------------------------------------------
   //  
   void display(){
-    fill(0);
+    fill(255,0,0);
     //scrittura dell'etichetta sotto all'interruttore
-    text(ButtonLable,x,y + 90); 
+    text(ButtonLable,x,y); 
     
     if (butt == 0){           
       // visualizzazione dell'immagine del deviatoio con tracciato deviato
@@ -96,7 +96,7 @@ class switch_left_up{
       delay(200);                                 //questo ciclo di ritardo funziona da debounce del tasto del mouse
       if (butt == 0){ butt = 1;} 
       else{           butt = 0;}
-      myPort.write('2');
+      myPort.write(ButtonLable);
       delay(250);       
       myPort.write('0');
     } 

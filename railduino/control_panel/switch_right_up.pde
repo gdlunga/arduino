@@ -52,8 +52,9 @@ class switch_right_up{
 
 //METODO display() ---------------------------
   void display(){
-    fill(0);
-    text(ButtonLable,x,y+90); //scrittura dell'etichetta sotto all'interruttore
+    fill(255,0,0);
+    //scrittura dell'etichetta sotto all'interruttore
+    text(ButtonLable,x,y); 
     
     if (butt == 0){           //se il valore di button = 0 viene visualizzata l'immagine dell'interruttore off 
       image(switch_right_up_div, x,y);  //visualizzazione del'interruttore off
@@ -91,7 +92,7 @@ class switch_right_up{
       {  
         butt = 0; //button viene cambiato in 0
       }
-      myPort.write('1');
+      myPort.write(ButtonLable);
       delay(250);       
       myPort.write('0');
     }  
