@@ -7,6 +7,10 @@ straight_signal   str1;
 straight_simple   str2;
 straight_simple   str3;
 straight_simple   str4;
+
+straight_simple   str21;
+straight_simple   str22;
+
 //-----------------------------------------------
 //dichiarazione VARIABILI
 PImage  griglia;  //definizione della variabile griglia di tipo PImage
@@ -19,6 +23,7 @@ void setup(){
   size(600,600);   //dimensione dell'area di disegno
   
   int track_1 = 200;
+  int track_2 = 100;
 
   String portName = Serial.list()[2]; //change the 0 to a 1 or 2 etc. to match your port
   myPort = new Serial(this, portName, 9600);
@@ -29,6 +34,10 @@ void setup(){
   str3  = new straight_simple(str1.right(), track_1, "");
   sw2   = new switch_right_up(str3.right(), track_1, "2", myPort);
   str4  = new straight_simple(sw2.right(),  track_1, "");
+  
+  str21 = new straight_simple(200,  track_2, "");
+  str22 = new straight_simple(str21.right(),  track_2,"");
+  
   
   //si carica l'immagine di una griglia per facilitare il posizionamento degli elementi dell'interfaccia
   griglia = loadImage("griglia_600_600.png"); 
@@ -45,6 +54,9 @@ void draw(){
   str3.display();
   sw2.display() ;
   str4.display();
+  
+  str21.display();
+  str22.display();
 }
 
 
